@@ -1,0 +1,261 @@
+﻿
+<style>
+
+    .ControlsBox {
+        background-color: #f5f8f9;
+        box-shadow: 0 4px 16px #1c1c1d5c;
+        max-width: 1200px;
+        align-content: center;
+        margin: 8% 5% 5% 10%;
+        
+        min-height: 400px;
+    }
+
+    .pageddl {
+        margin-top: 25px;
+    }
+
+
+    .md-datepicker-calendar {
+        width: 350px !important;
+    }
+    #loading {
+        width: 100%;
+        height: 100%;
+        top: 0px;
+        left: 0px;
+        position: fixed;
+        display: block;
+        opacity: 0.7;
+        background-color: #fff;
+        z-index: 99;
+        text-align: center;
+    }
+
+    #loading-image {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        z-index: 100;
+    }
+</style>
+
+
+
+
+
+<div ng-show="!nonsupplier" class="mainDiv uptheme"> <strong style="color:red"> You're Unauthorised</strong></div>
+<div id="loading" ng-show="dropdownloader">
+
+    <img id="loading-image" src="~/Content/Assets/generatorphp-thumb.gif" alt="Loading..." />
+</div>
+
+
+<div class="row  ControlsBox" ng-show="nonsupplier">
+
+    <div class="row" style="float:right;width:100%">
+        <div class="button small special" style="float:left;font-size:large; background:none;padding-left:5px;    cursor: default;">
+            <span style="color:#45afd9"><i class="fa fa-calendar"></i>Latest Receipt Date:{{refreshdate | date: 'MM-dd-yyyy' }}</span>
+        </div>
+
+    </div>
+    <div class="col-md-4 pageddl">
+        <h3>Material Number</h3>
+        <textarea id="partInput" ng-model="materialnum" ng-trim="true" required="required" focus-me="{{shouldBeOpen}}"></textarea>
+    </div>
+    <div class="col-md-4">
+        <table>
+            <tr>
+                <td>
+                    <div class="col-md-5 pageddl">
+                        <h3>Plant Code:</h3>
+                    </div>
+                    <div class="col-md-7 pageddl">
+
+
+                        <multiselect class="input-xlarge multiselect" ng-model="plantcdselection" options="x.plant_Code for x in plantcdoptions"
+                                     header="None Selected" selected-header="options selected" multiple="true" complex-models="true" required
+                                     enable-filter="true" filter-placeholder="Filter ....">
+                        </multiselect>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="col-md-5 pageddl">
+                        <h3>Supplier Site:</h3>
+                    </div>
+                    <div class="col-md-7 pageddl">
+
+
+                        <multiselect class="input-xlarge multiselect" ng-model="suppliersitenameselection" options="x.Supplier_Site_Name for x in suppliersitenameoptions"
+                                     header="None Selected" selected-header="options selected" multiple="true" complex-models="true" required
+                                     enable-filter="true" filter-placeholder="Filter ....">
+                        </multiselect>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="col-md-5 pageddl">
+                        <h3>Parent Supplier:</h3>
+                    </div>
+                    <div class="col-md-7 pageddl">
+
+
+                        <multiselect class="input-xlarge multiselect" ng-model="ParentSupplierNameselection" options="x.ParentSupplierName for x in ParentSupplierNameoptions"
+                                     header="None Selected" selected-header="options selected" multiple="true" complex-models="true" required
+                                     enable-filter="true" filter-placeholder="Filter ....">
+                        </multiselect>
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+
+    </div>
+    <div class="col-md-4">
+
+        <table>
+            <tr>
+                <td>
+                    <div class="col-md-12  pageddl" style="text-align:center">
+
+                        <h3>Receipt Date</h3>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="col-md-12 pageddl">
+
+                        <h3>From:</h3>
+                        <md-content class="datepickerdemoValidations" style="min-height:50px">
+                            <div flex-gt-xs="">
+                                <md-datepicker ng-model="fromdate" md-placeholder="Enter date" md-min-date="minDate" md-max-date="maxDate"></md-datepicker>
+                            </div>
+                        </md-content>
+                    </div>
+
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="col-md-12 pageddl">
+                        <h3>To:</h3>
+                        <md-content class="datepickerdemoValidations" style="min-height:50px">
+
+                            <md-datepicker ng-model="todate" md-placeholder="Enter date" md-min-date="minDate" md-max-date="maxDate"></md-datepicker>
+
+                        </md-content>
+                    </div>
+
+                </td>
+            </tr>
+
+        </table>
+
+    </div>
+    <div class="col-md-12">
+
+        <ul class="text-center" style="list-style: none;">
+            <li>
+
+                <button class="buttons special " id="submitBtn" ng-Click="GetReport(1)"> <i class="fa fa-search"></i>Summary Report</button>
+
+                <button class="buttons special " id="submitBtn" ng-Click="GetReport(2)"> <i class="fa fa-search"></i>Detailed Report</button>
+                <button class="buttons  special " ng-Click="resetDetails()" style="background-color:#ffc551"> <i class="fa  fa-recycle"></i>Reset</button>
+                @*<button class="buttons  special " ng-Click="Addfavourites()" style="background-color:#ffc551">
+                        <i class="fa fa-star"></i> {{ Favbutton}}  <i class="fa fa-spinner" ng-show="favspin"></i>
+                    </button>*@
+
+            </li>
+            <li> For any Queries please contact Himanshu mehta</li>
+        </ul>
+
+    </div>
+
+</div>
+
+
+
+<style>
+    multiselect {
+        display: block;
+    }
+
+        multiselect > .btn-group {
+            min-width: 180px;
+        }
+
+        multiselect .btn {
+            width: 100%;
+            background-color: #FFF;
+        }
+
+            multiselect .btn.has-error {
+                border: 1px solid #a94442 !important;
+                color: #db524b;
+            }
+
+        multiselect .dropdown-menu {
+            max-height: 300px;
+            min-width: 200px;
+            overflow-y: auto;
+        }
+
+            multiselect .dropdown-menu .filter > input {
+                width: 80%;
+            }
+
+            multiselect .dropdown-menu .filter .glyphicon {
+                cursor: pointer;
+                pointer-events: all;
+            }
+
+        multiselect .dropdown-menu {
+            width: 200%;
+            box-sizing: border-box;
+            padding: 2px;
+        }
+
+        multiselect > .btn-group > button {
+            /*padding-right: 20px;*/
+        }
+
+
+            multiselect > .btn-group > button > .caret {
+                border-left: 4px solid transparent;
+                border-right: 4px solid transparent;
+                border-top: 4px solid black;
+                right: 5px;
+                /*top: 45%;*/
+                position: absolute;
+            }
+
+        multiselect .dropdown-menu > li > a {
+            padding: 3px 5px 2px 0px;
+            cursor: pointer;
+        }
+
+            multiselect .dropdown-menu > li > a i {
+                margin-right: 4px;
+            }
+
+        multiselect .btn-small {
+            padding: 2px 5px !important;
+        }
+
+        multiselect .form-group {
+            margin-bottom: 0 !important;
+        }
+
+        multiselect .form-control {
+            margin-bottom: 0 !important;
+        }
+
+    .glyphicon-none:before {
+        content: "\e013";
+        color: transparent !important;
+    }
+</style>
